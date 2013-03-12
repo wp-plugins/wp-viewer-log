@@ -7,7 +7,7 @@ Tested up to: 3.5
 Stable tag: 0.1
 License: GPL/MIT
 
-Lets see how many errors have had in the present day through a widget, configure your wp-config.php and see the file debug.log to a maximum of 100 lines.
+Lets see how many errors have had in the present day through a widget, configure your wp-config.php and see the file log to a maximum of 100 lines.
 
 == Description ==
 
