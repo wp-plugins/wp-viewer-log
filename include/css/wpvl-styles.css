@@ -1,0 +1,24 @@
+.wpvl-html{overflow:auto;max-height:350px;border-radius:3px;-webkit-border-radius:3px;border:1px solid}
+.wpvl-html.conf{max-height:100%}
+.wpvl-html *{margin:0;padding:0}
+.wpvl-html .gutter{border-right:3px solid;color:#fff}
+.wpvl-html .gutter, .wpvl-html .right-widget{text-align:right;padding:0 .5em 0 1em}
+.wpvl-html .code, .wpvl-html .left-widget{width:100%;text-align:left;padding:0 .5em}
+.wpvl-html.wpvl-widget th, .wpvl-html.wpvl-widget td{padding-top:.5em;padding-bottom:.5em}
+.wpvl-html.wpvl-widget th{font-family:sans-serif;color:#fff}
+.wpvl-html.wpvl-widget td{border-top:1px solid}
+.wpvl-html .str{font-family:sans-serif;padding:1em;text-align:center}
+.wpvl-html .str.error{color:red}
+.wpvl-widget-buttons{margin-top:1em}
+.wpvl-widget-buttons p.submit.options{float:left!important;padding-left:0!important}
+.wpvl-widget-buttons p.submit.view{padding-right:0!important}
+/* Theme Fresh */
+.wpvl-html.theme-fresh{background-color:#f9f9f9;border-color:#ccc}
+.wpvl-html.theme-fresh.wpvl-widget th{color:#21759B;background-color:#ccc}
+.wpvl-html.theme-fresh.wpvl-widget td{border-color:#ccc}
+.wpvl-html.theme-fresh .gutter{background-color:#555;border-color:#555}
+/* Theme Classic */
+.wpvl-html.theme-classic{background-color:#fff;border-color:#aaccdd}
+.wpvl-html.theme-classic.wpvl-widget th{color:#21759b;background-color:#aaccdd}
+.wpvl-html.theme-classic.wpvl-widget td{border-color:#aaccdd}
+.wpvl-html.theme-classic .gutter{background-color:#619bbb;border-color:#619bbb}
