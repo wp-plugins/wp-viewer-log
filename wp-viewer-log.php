@@ -27,26 +27,25 @@ if( !class_exists( 'WP_VIEWER_LOG' ) ) :
 class WP_VIEWER_LOG {
 	const wpvl_version = '1.0';
 	private
+		$total_errors,
 		$wpvl_log_errors,
+		$conf_original,
+		$conf_backup,
 		$wpvl_options,
 		$wpvl_options_defaults = array(
-			'wpvl_enable_widget' 					=>	'1',
-			'wpvl_show_wp_config'					=>	'0',
-			'wpvl_custom_code' 						=>	'1',
-			'wpvl_text_wp_config'					=>	'',
-			'wpvl_enable_admin_bar'					=>	'1',
-		),
-		$conf_original,
-		$conf_backup;
+			'wpvl_enable_widget'		=>	'1',
+			'wpvl_enable_admin_bar'		=>	'1',
+			'wpvl_show_wp_config'		=>	'0',
+			'wpvl_custom_code'			=>	'1',
+			'wpvl_text_wp_config'		=>	''
+		);
 	function __construct(){
-		register_activation_hook( __FILE__, array( $this, 'wpvl_activate' ) );
-		register_deactivation_hook( __FILE__, array( $this, 'wpvl_deactivate' ) );
 		add_action( 'init', array( $this, 'wpvl_init' ) );
 		add_action( 'admin_init', array( $this, 'wpvl_enable_widget' ) );
-		add_action( 'admin_init', array( $this, 'count_bubble' ), 99 );
 		add_action( 'admin_init', array( $this, 'wpvl_admin_options' ) );
 		add_action( 'admin_init', array( $this, 'wpvl_write_wp_config' ) );
 		add_action( 'admin_init', array( $this, 'wpvl_clear_log' ) );
+		add_action( 'admin_init', array( $this, 'count_bubble' ), 99 );
 		add_action( 'admin_menu', array( $this, 'wpvl_page_menu' ) );
 		add_action( 'admin_bar_menu', array( $this, 'wpvl_add_admin_bar_item' ), 99 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'wpvl_page_scripts' ) );
@@ -57,6 +56,9 @@ class WP_VIEWER_LOG {
 			define( 'ABSPATH', '../' );
 		$this->conf_backup = ABSPATH . 'wp-config-backup.php';
 		$this->conf_original = ABSPATH . 'wp-config.php';
+		$this->total_errors = $this->wpvl_read_file( 'bubble', false );
+		register_activation_hook( __FILE__, array( $this, 'wpvl_activate' ) );
+		register_deactivation_hook( __FILE__, array( $this, 'wpvl_deactivate' ) );
 	}
 	function wpvl_init(){
 		global $wp_version;
@@ -64,22 +66,26 @@ class WP_VIEWER_LOG {
 			wp_die( __( 'This plugin requires WordPress 3.3 or greater.', 'wpvllang' ) );
   		load_plugin_textdomain( 'wpvllang', false, dirname( plugin_basename( __FILE__ ) ) . '/include/languages/' );
 	}
-	private function wpvl_init_only_admin(){
-		// Private Function to check permissions
-		if( current_user_can( 'activate_plugins' ) )
-			return true;
-		else
-			return false;
-	}
 	function wpvl_activate(){	
-		add_option( 'wpvl-options', $this->wpvl_options_defaults );
+		if( isset( $this->wpvl_options['wpvl_custom_code'] ) ){
+			foreach( $this->wpvl_options as $option => $value ){
+				foreach( $this->wpvl_options_defaults as $doption => $dvalue ){
+					if( $option == $doption )
+						$this->wpvl_options_defaults[$doption] = $this->wpvl_options[$option];
+				}
+			}
+			delete_option( 'wpvl-options' );
+			add_option( 'wpvl-options', $this->wpvl_options_defaults );
+		} else {
+			add_option( 'wpvl-options', $this->wpvl_options_defaults );
+		}
 	}
 	function wpvl_deactivate(){
 		if( file_exists( $this->conf_backup ) )
 			rename( $this->conf_backup, $this->conf_original ); // Restore Original wp-config.php
 		if( substr( $this->wpvl_log_errors, -9 ) === 'debug.log' )
 			@unlink( $this->wpvl_log_errors ); // Delete debug.log file
-		delete_option( 'wpvl-options' );
+		//delete_option( 'wpvl-options' );
 	}
 	function wpvl_plugin_action_links( $links, $file ){
     	if ( $file == plugin_basename( __FILE__ ) ){
@@ -87,6 +93,13 @@ class WP_VIEWER_LOG {
 	  		array_unshift( $links, $setting_link );
 		}
     	return $links;
+	}
+	private function wpvl_init_only_admin(){
+		// Private Function to check permissions
+		if( current_user_can( 'activate_plugins' ) )
+			return true;
+		else
+			return false;
 	}
 	function wpvl_admin_options(){
 		register_setting( 'wpvl-register', 'wpvl-options', array( $this, 'wpvl_validate' ) );
@@ -106,7 +119,7 @@ class WP_VIEWER_LOG {
 				$output[$key] = $input[$key];
 		}
 		if( $output['wpvl_custom_code'] === '1' || $output['wpvl_custom_code'] === '2' ) // remove custom code in textarea
-			unset( $output['wpvl_text_wp_config'] );
+			$output['wpvl_text_wp_config'] = '';
 		if( $output['no_overwrite'] != $output['wpvl_custom_code'] )
 			$output['no_overwrite'] = $output['wpvl_custom_code'];
 			
@@ -503,7 +516,7 @@ class WP_VIEWER_LOG {
 			if( !$this->wpvl_init_only_admin() )
 				return;
 			$frontend = ( $this->wpvl_options['wpvl_enable_admin_bar'] === '3' ) ? true : false;
-			$num = $this->wpvl_read_file( 'bubble', false );
+			$num = $this->total_errors;
 			$text = ( $num > 1 ) ? __( 'Errors', 'wpvllang' ) : __( 'Error', 'wpvllang' );
 			$title = sprintf( '<span style="color:red" class="count-%1s"> %2s %3s</span>', $num, number_format_i18n( $num ), $text );
 			if( $num > 0 )
@@ -521,7 +534,7 @@ class WP_VIEWER_LOG {
 		}
 	}
 	function count_bubble(){
-		$num = $this->wpvl_read_file( 'bubble', false );
+		$num = $this->total_errors;
 		$count = '<span class="update-plugins wpvl-bubble count-' . $num . '"><span class="plugin-count">' . $num . '</span></span>';
 		global $menu;
 		foreach( $menu as $key => $submenu ){
