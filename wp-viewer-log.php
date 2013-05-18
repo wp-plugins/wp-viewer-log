@@ -74,8 +74,8 @@ class WP_VIEWER_LOG {
 						$this->wpvl_options_defaults[$doption] = $this->wpvl_options[$option];
 				}
 			}
-			update_option( 'wpvl-options', $this->wpvl_options_defaults );
-			wp_die( var_dump($this->wpvl_options));
+			delete_option( 'wpvl-options' );
+			add_option( 'wpvl-options', $this->wpvl_options_defaults );
 		} else {
 			add_option( 'wpvl-options', $this->wpvl_options_defaults );
 		}
