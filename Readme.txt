@@ -4,15 +4,18 @@ Donate link:
 Tags: Dashboard, widget, debug, log
 Requires at least: 3.3
 Tested up to: 3.5
-Stable tag: 1.0.4
+Stable tag: 1.0b
 License: GPL/MIT
 
 Lets see how many errors have had in the present day through a widget, configure your wp-config.php and see the file log to a maximum of 100 lines.
 
 == Description ==
 
+Please return to version 0.1 and update after version beta
+
 Add widget into Dashboard for view the day errors, view full log in page this plugin and configure the wp-config.php (optional) and add link to view errors in admin bar
 
+Por favor vuelva a la version 0.1 y actualizar despues de la version beta
 
 Añade un widget en el escritorio para ver los errores del dia, ver el log completo en la página del plugin y configurar el wp-config.php (optional) y añadir un enlace para ver los errores en la barra de administración
 
@@ -28,8 +31,8 @@ Añade un widget en el escritorio para ver los errores del dia, ver el log compl
 * Si desea personalizar el wp-config.php, vaya a la página de opciones dentro de WPVL en el panel de administración de WordPress
 
 == Changelog ==
-= 1.0.4 =
-* fix Undefined index ( Sorry!!! )
+= 1.0b =
+* fix Undefined index ( Sorry!!! ) small problem 
 = 1.0 =
 * Redesign plugin class
 * Create Custom menu page

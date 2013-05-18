@@ -4,7 +4,7 @@ Plugin Name: WP Viewer Log
 Plugin URI: http://wordpress.org/extend/plugins/wp-viewer-log/
 Description: Lets see how many errors have had in the present day through a widget, configure your wp-config.php and see the file log to a maximum of 100 lines.
 Author: Sergio P.A. ( 23r9i0 )
-Version: 1.0.4
+Version: 1.0b
 Author URI: http://dsergio.com/
 */
 /*  Copyright 2013  Sergio Prieto Alvarez  ( email : info@dsergio.com )
@@ -25,27 +25,26 @@ Author URI: http://dsergio.com/
 */
 if( !class_exists( 'WP_VIEWER_LOG' ) ) : 
 class WP_VIEWER_LOG {
-	const wpvl_version = '1.0.4';
+	const wpvl_version = '1.0b';
 	private
 		$wpvl_log_errors,
 		$wpvl_options,
 		$wpvl_options_defaults = array(
-			'wpvl_enable_widget' 					=>	'1',
-			'wpvl_enable_admin_bar'					=>	'1',
-			'wpvl_show_wp_config'					=>	'0',
-			'wpvl_custom_code' 						=>	'1',
-			'wpvl_text_wp_config'					=>	''
-			
+				'wpvl_enable_widget' 		=>	'1',
+				'wpvl_enable_admin_bar'		=>	'1',
+				'wpvl_show_wp_config'		=>	'0',
+				'wpvl_custom_code' 			=>	'1',
+				'wpvl_text_wp_config'		=>	''
 		),
 		$conf_original,
 		$conf_backup;
 	function __construct(){
 		add_action( 'init', array( $this, 'wpvl_init' ) );
 		add_action( 'admin_init', array( $this, 'wpvl_enable_widget' ) );
-		add_action( 'admin_init', array( $this, 'count_bubble' ), 99 );
 		add_action( 'admin_init', array( $this, 'wpvl_admin_options' ) );
 		add_action( 'admin_init', array( $this, 'wpvl_write_wp_config' ) );
 		add_action( 'admin_init', array( $this, 'wpvl_clear_log' ) );
+		add_action( 'admin_init', array( $this, 'count_bubble' ), 99 );
 		add_action( 'admin_menu', array( $this, 'wpvl_page_menu' ) );
 		add_action( 'admin_bar_menu', array( $this, 'wpvl_add_admin_bar_item' ), 99 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'wpvl_page_scripts' ) );
@@ -540,6 +539,7 @@ class WP_VIEWER_LOG {
 				break;
 			}
 		}
+		return $menu;
 	}
 }
 $wpvl = new WP_VIEWER_LOG;
