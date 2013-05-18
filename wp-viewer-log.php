@@ -85,7 +85,7 @@ class WP_VIEWER_LOG {
 			rename( $this->conf_backup, $this->conf_original ); // Restore Original wp-config.php
 		if( substr( $this->wpvl_log_errors, -9 ) === 'debug.log' )
 			@unlink( $this->wpvl_log_errors ); // Delete debug.log file
-		//delete_option( 'wpvl-options' );
+		delete_option( 'wpvl-options' );
 	}
 	function wpvl_plugin_action_links( $links, $file ){
     	if ( $file == plugin_basename( __FILE__ ) ){
