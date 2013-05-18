@@ -72,6 +72,16 @@ class WP_VIEWER_LOG {
 			return false;
 	}
 	function wpvl_activate(){	
+		if( isset( $this->wpvl_options ) ){
+			foreach( $this->wpvl_options as $option => $value ){
+				foreach( $this->wpvl_options_defaults as $doption => $dvalue ){
+						$this->wpvl_options_defaults[$option] = $this->wpvl_options[$option];
+				}
+			}
+			update_option( 'wpvl-options', $this->wpvl_options_defaults );
+		} else {
+			add_option( 'wpvl-options', $this->wpvl_options_defaults );
+		}
 		add_option( 'wpvl-options', $this->wpvl_options_defaults );
 	}
 	function wpvl_deactivate(){
