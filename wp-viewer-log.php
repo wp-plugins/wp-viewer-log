@@ -4,7 +4,7 @@ Plugin Name: WP Viewer Log
 Plugin URI: http://wordpress.org/extend/plugins/wp-viewer-log/
 Description: Lets see how many errors have had in the present day through a widget, configure your wp-config.php and see the file log to a maximum of 100 lines.
 Author: Sergio P.A. ( 23r9i0 )
-Version: 1.0.3
+Version: 1.0.4
 Author URI: http://dsergio.com/
 */
 /*  Copyright 2013  Sergio Prieto Alvarez  ( email : info@dsergio.com )
@@ -25,22 +25,21 @@ Author URI: http://dsergio.com/
 */
 if( !class_exists( 'WP_VIEWER_LOG' ) ) : 
 class WP_VIEWER_LOG {
-	const wpvl_version = '1.0.3';
+	const wpvl_version = '1.0.4';
 	private
 		$wpvl_log_errors,
 		$wpvl_options,
 		$wpvl_options_defaults = array(
 			'wpvl_enable_widget' 					=>	'1',
+			'wpvl_enable_admin_bar'					=>	'1',
 			'wpvl_show_wp_config'					=>	'0',
 			'wpvl_custom_code' 						=>	'1',
-			'wpvl_text_wp_config'					=>	'',
-			'wpvl_enable_admin_bar'					=>	'1'
+			'wpvl_text_wp_config'					=>	''
+			
 		),
 		$conf_original,
 		$conf_backup;
 	function __construct(){
-		register_activation_hook( __FILE__, array( $this, 'wpvl_activate' ) );
-		register_deactivation_hook( __FILE__, array( $this, 'wpvl_deactivate' ) );
 		add_action( 'init', array( $this, 'wpvl_init' ) );
 		add_action( 'admin_init', array( $this, 'wpvl_enable_widget' ) );
 		add_action( 'admin_init', array( $this, 'count_bubble' ), 99 );
@@ -57,6 +56,8 @@ class WP_VIEWER_LOG {
 			define( 'ABSPATH', '../' );
 		$this->conf_backup = ABSPATH . 'wp-config-backup.php';
 		$this->conf_original = ABSPATH . 'wp-config.php';
+		register_activation_hook( __FILE__, array( $this, 'wpvl_activate' ) );
+		register_deactivation_hook( __FILE__, array( $this, 'wpvl_deactivate' ) );
 	}
 	function wpvl_init(){
 		global $wp_version;
@@ -539,7 +540,6 @@ class WP_VIEWER_LOG {
 				break;
 			}
 		}
-		return $menu;
 	}
 }
 $wpvl = new WP_VIEWER_LOG;
