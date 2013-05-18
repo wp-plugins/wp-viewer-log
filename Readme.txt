@@ -28,7 +28,7 @@ Añade un widget en el escritorio para ver los errores del dia, ver el log compl
 * Si desea personalizar el wp-config.php, vaya a la página de opciones dentro de WPVL en el panel de administración de WordPress
 
 == Changelog ==
-= 1.0.1 =
+= 1.0.2 =
 * fix Undefined index
 = 1.0 =
 * Redesign plugin class
