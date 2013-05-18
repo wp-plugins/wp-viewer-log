@@ -4,7 +4,7 @@ Plugin Name: WP Viewer Log
 Plugin URI: http://wordpress.org/extend/plugins/wp-viewer-log/
 Description: Lets see how many errors have had in the present day through a widget, configure your wp-config.php and see the file log to a maximum of 100 lines.
 Author: Sergio P.A. ( 23r9i0 )
-Version: 1.0.10b
+Version: 1.0.11b
 Author URI: http://dsergio.com/
 */
 /*  Copyright 2013  Sergio Prieto Alvarez  ( email : info@dsergio.com )
@@ -25,7 +25,7 @@ Author URI: http://dsergio.com/
 */
 if( !class_exists( 'WP_VIEWER_LOG' ) ) : 
 class WP_VIEWER_LOG {
-	const wpvl_version = '1.0.10b';
+	const wpvl_version = '1.0.11b';
 	private
 		$total_errors,
 		$wpvl_log_errors,
@@ -33,10 +33,10 @@ class WP_VIEWER_LOG {
 		$conf_backup,
 		$wpvl_options,
 		$wpvl_options_defaults = array(
-			'wpvl_enable_widget' 		=>	'1',
+			'wpvl_enable_widget'		=>	'1',
 			'wpvl_enable_admin_bar'		=>	'1',
 			'wpvl_show_wp_config'		=>	'0',
-			'wpvl_custom_code' 			=>	'1',
+			'wpvl_custom_code'			=>	'1',
 			'wpvl_text_wp_config'		=>	''
 		);
 	function __construct(){
@@ -50,8 +50,6 @@ class WP_VIEWER_LOG {
 		add_action( 'admin_bar_menu', array( $this, 'wpvl_add_admin_bar_item' ), 99 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'wpvl_page_scripts' ) );
 		add_filter( 'plugin_action_links', array( $this, 'wpvl_plugin_action_links' ), 10, 2 );
-		register_activation_hook( __FILE__, array( $this, 'wpvl_activate' ) );
-		register_deactivation_hook( __FILE__, array( $this, 'wpvl_deactivate' ) );
 		$this->wpvl_options = get_option( 'wpvl-options' );
 		$this->wpvl_log_errors = ini_get('error_log');
 		if ( !defined( 'ABSPATH' ) )
@@ -59,6 +57,8 @@ class WP_VIEWER_LOG {
 		$this->conf_backup = ABSPATH . 'wp-config-backup.php';
 		$this->conf_original = ABSPATH . 'wp-config.php';
 		$this->total_errors = $this->wpvl_read_file( 'bubble', false );
+		register_activation_hook( __FILE__, array( $this, 'wpvl_activate' ) );
+		register_deactivation_hook( __FILE__, array( $this, 'wpvl_deactivate' ) );
 	}
 	function wpvl_init(){
 		global $wp_version;
@@ -68,16 +68,15 @@ class WP_VIEWER_LOG {
 	}
 	function wpvl_activate(){	
 		if( isset( $this->wpvl_options['wpvl_custom_code'] ) ){
-			$update = array();
 			foreach( $this->wpvl_options as $option => $value ){
 				foreach( $this->wpvl_options_defaults as $doption => $dvalue ){
-					if( $option == $doption )
-						$update[$doption] = $this->wpvl_options[$option];
-					else
-						$update[] = $doption;
+					if( $option == $doption ){
+						$this->wpvl_options_defaults[$doption] = $this->wpvl_options[$option];
+						continue;
+					}
 				}
 			}
-			update_option( 'wpvl-options', $update );
+			update_option( 'wpvl-options', $this->wpvl_options_defaults );
 		} else {
 			add_option( 'wpvl-options', $this->wpvl_options_defaults );
 		}
