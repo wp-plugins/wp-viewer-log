@@ -4,7 +4,7 @@ Donate link:
 Tags: Dashboard, widget, debug, log
 Requires at least: 3.3
 Tested up to: 3.5
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPL/MIT
 
 Lets see how many errors have had in the present day through a widget, configure your wp-config.php and see the file log to a maximum of 100 lines.
