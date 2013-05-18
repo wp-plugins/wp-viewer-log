@@ -82,7 +82,6 @@ class WP_VIEWER_LOG {
 		} else {
 			add_option( 'wpvl-options', $this->wpvl_options_defaults );
 		}
-		add_option( 'wpvl-options', $this->wpvl_options_defaults );
 	}
 	function wpvl_deactivate(){
 		if( file_exists( $this->conf_backup ) )
