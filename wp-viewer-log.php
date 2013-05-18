@@ -4,7 +4,7 @@ Plugin Name: WP Viewer Log
 Plugin URI: http://wordpress.org/extend/plugins/wp-viewer-log/
 Description: Lets see how many errors have had in the present day through a widget, configure your wp-config.php and see the file log to a maximum of 100 lines.
 Author: Sergio P.A. ( 23r9i0 )
-Version: 1.0.7b
+Version: 1.0.8b
 Author URI: http://dsergio.com/
 */
 /*  Copyright 2013  Sergio Prieto Alvarez  ( email : info@dsergio.com )
@@ -25,20 +25,20 @@ Author URI: http://dsergio.com/
 */
 if( !class_exists( 'WP_VIEWER_LOG' ) ) : 
 class WP_VIEWER_LOG {
-	const wpvl_version = '1.0.7b';
+	const wpvl_version = '1.0.8b';
 	private
+		$total_errors,
 		$wpvl_log_errors,
-		$wpvl_options,
-		$wpvl_options_defaults = array(
-				'wpvl_enable_widget' 		=>	'1',
-				'wpvl_enable_admin_bar'		=>	'1',
-				'wpvl_show_wp_config'		=>	'0',
-				'wpvl_custom_code' 			=>	'1',
-				'wpvl_text_wp_config'		=>	''
-		),
 		$conf_original,
 		$conf_backup,
-		$total_errors;
+		$wpvl_options,
+		$wpvl_options_defaults = array(
+			'wpvl_enable_widget' 		=>	'1',
+			'wpvl_enable_admin_bar'		=>	'1',
+			'wpvl_show_wp_config'		=>	'0',
+			'wpvl_custom_code' 			=>	'1',
+			'wpvl_text_wp_config'		=>	''
+		);
 	function __construct(){
 		add_action( 'init', array( $this, 'wpvl_init' ) );
 		add_action( 'admin_init', array( $this, 'wpvl_enable_widget' ) );
@@ -65,13 +65,6 @@ class WP_VIEWER_LOG {
 		if ( version_compare( $wp_version, '3.3', '< ' ) )
 			wp_die( __( 'This plugin requires WordPress 3.3 or greater.', 'wpvllang' ) );
   		load_plugin_textdomain( 'wpvllang', false, dirname( plugin_basename( __FILE__ ) ) . '/include/languages/' );
-	}
-	private function wpvl_init_only_admin(){
-		// Private Function to check permissions
-		if( current_user_can( 'activate_plugins' ) )
-			return true;
-		else
-			return false;
 	}
 	function wpvl_activate(){	
 		if( isset( $this->wpvl_options['wpvl_enable_widget'] ) ){
@@ -100,6 +93,13 @@ class WP_VIEWER_LOG {
 	  		array_unshift( $links, $setting_link );
 		}
     	return $links;
+	}
+	private function wpvl_init_only_admin(){
+		// Private Function to check permissions
+		if( current_user_can( 'activate_plugins' ) )
+			return true;
+		else
+			return false;
 	}
 	function wpvl_admin_options(){
 		register_setting( 'wpvl-register', 'wpvl-options', array( $this, 'wpvl_validate' ) );
