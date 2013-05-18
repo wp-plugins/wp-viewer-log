@@ -1,0 +1,42 @@
+﻿=== WP Viewer Log ===
+Contributors: 23r9i0
+Donate link:
+Tags: Dashboard, widget, debug, log
+Requires at least: 3.3
+Tested up to: 3.5
+Stable tag: 1.0.11b
+License: GPL/MIT
+
+Lets see how many errors have had in the present day through a widget, configure your wp-config.php and see the file log to a maximum of 100 lines.
+
+== Description ==
+
+Please return to version 0.1 and update after version beta
+
+Add widget into Dashboard for view the day errors, view full log in page this plugin and configure the wp-config.php (optional) and add link to view errors in admin bar
+
+Por favor vuelva a la version 0.1 y actualizar despues de la version beta
+
+Añade un widget en el escritorio para ver los errores del dia, ver el log completo en la página del plugin y configurar el wp-config.php (optional) y añadir un enlace para ver los errores en la barra de administración
+
+== Installation ==
+
+* Upload the 'wp-viewer-log' folder to the '/wp-content/plugins/' directory.
+* Activate the plugin through the 'Plugins' menu in WordPress.
+* To customize the wp-config.php, go to the options page in the WPVL in WordPress admin panel.
+
+
+* Suba la carpeta 'wp-viewer-log' dentro del directorio '/wp-content/plugins/'.
+* Activar el plugin a través del menú 'Plugins' en WordPress.
+* Si desea personalizar el wp-config.php, vaya a la página de opciones dentro de WPVL en el panel de administración de WordPress.
+
+== Changelog ==
+= 1.0.11b =
+* fix Undefined index ( Sorry!!! ) small problem NO UPDATE
+= 1.0 =
+* Redesign plugin class
+* Create Custom menu page
+* Add new options
+* Disable overwrite wp-config.php
+= 0.1 =
+* initial release
