@@ -26,9 +26,9 @@ Añade un widget en el escritorio para ver los errores del dia, ver el log compl
 * To customize the wp-config.php, go to the options page in the WPVL in WordPress admin panel
 
 
-- Suba la carpeta 'wp-viewer-log' dentro del directorio '/wp-content/plugins/'
-- Activar el plugin a través del menú 'Plugins' en WordPress
-- Si desea personalizar el wp-config.php, vaya a la página de opciones dentro de WPVL en el panel de administración de WordPress
+Suba la carpeta 'wp-viewer-log' dentro del directorio '/wp-content/plugins/'
+Activar el plugin a través del menú 'Plugins' en WordPress
+Si desea personalizar el wp-config.php, vaya a la página de opciones dentro de WPVL en el panel de administración de WordPress
 
 == Changelog ==
 = 1.0.9b =
