@@ -4,7 +4,7 @@ Plugin Name: WP Viewer Log
 Plugin URI: http://wordpress.org/extend/plugins/wp-viewer-log/
 Description: Lets see how many errors have had in the present day through a widget, configure your wp-config.php and see the file log to a maximum of 100 lines.
 Author: Sergio P.A. ( 23r9i0 )
-Version: 1.0.5b
+Version: 1.0.6b
 Author URI: http://dsergio.com/
 */
 /*  Copyright 2013  Sergio Prieto Alvarez  ( email : info@dsergio.com )
@@ -25,7 +25,7 @@ Author URI: http://dsergio.com/
 */
 if( !class_exists( 'WP_VIEWER_LOG' ) ) : 
 class WP_VIEWER_LOG {
-	const wpvl_version = '1.0.5b';
+	const wpvl_version = '1.0.6b';
 	private
 		$wpvl_log_errors,
 		$wpvl_options,
@@ -37,7 +37,8 @@ class WP_VIEWER_LOG {
 				'wpvl_text_wp_config'		=>	''
 		),
 		$conf_original,
-		$conf_backup;
+		$conf_backup,
+		$total_errors;
 	function __construct(){
 		add_action( 'init', array( $this, 'wpvl_init' ) );
 		add_action( 'admin_init', array( $this, 'wpvl_enable_widget' ) );
@@ -49,14 +50,15 @@ class WP_VIEWER_LOG {
 		add_action( 'admin_bar_menu', array( $this, 'wpvl_add_admin_bar_item' ), 99 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'wpvl_page_scripts' ) );
 		add_filter( 'plugin_action_links', array( $this, 'wpvl_plugin_action_links' ), 10, 2 );
+		register_activation_hook( __FILE__, array( $this, 'wpvl_activate' ) );
+		register_deactivation_hook( __FILE__, array( $this, 'wpvl_deactivate' ) );
 		$this->wpvl_options = get_option( 'wpvl-options' );
 		$this->wpvl_log_errors = ini_get('error_log');
 		if ( !defined( 'ABSPATH' ) )
 			define( 'ABSPATH', '../' );
 		$this->conf_backup = ABSPATH . 'wp-config-backup.php';
 		$this->conf_original = ABSPATH . 'wp-config.php';
-		register_activation_hook( __FILE__, array( $this, 'wpvl_activate' ) );
-		register_deactivation_hook( __FILE__, array( $this, 'wpvl_deactivate' ) );
+		$this->total_errors = $this->wpvl_read_file( 'bubble', false );
 	}
 	function wpvl_init(){
 		global $wp_version;
@@ -75,6 +77,7 @@ class WP_VIEWER_LOG {
 		if( isset( $this->wpvl_options['wpvl_enable_widget'] ) ){
 			foreach( $this->wpvl_options as $option => $value ){
 				foreach( $this->wpvl_options_defaults as $doption => $dvalue ){
+					if( $option == $doption )
 						$this->wpvl_options_defaults[$doption] = $this->wpvl_options[$option];
 				}
 			}
@@ -512,7 +515,7 @@ class WP_VIEWER_LOG {
 			if( !$this->wpvl_init_only_admin() )
 				return;
 			$frontend = ( $this->wpvl_options['wpvl_enable_admin_bar'] === '3' ) ? true : false;
-			$num = $this->wpvl_read_file( 'bubble', false );
+			$num = $this->total_errors;
 			$text = ( $num > 1 ) ? __( 'Errors', 'wpvllang' ) : __( 'Error', 'wpvllang' );
 			$title = sprintf( '<span style="color:red" class="count-%1s"> %2s %3s</span>', $num, number_format_i18n( $num ), $text );
 			if( $num > 0 )
@@ -530,7 +533,7 @@ class WP_VIEWER_LOG {
 		}
 	}
 	function count_bubble(){
-		$num = $this->wpvl_read_file( 'bubble', false );
+		$num = $this->total_errors;
 		$count = '<span class="update-plugins wpvl-bubble count-' . $num . '"><span class="plugin-count">' . $num . '</span></span>';
 		global $menu;
 		foreach( $menu as $key => $submenu ){
