@@ -1,7 +1,7 @@
 ﻿=== WP Viewer Log ===
 Contributors: 23r9i0
 Donate link:
-Tags: Dashboard, widget, debug, log
+Tags: Dashboard, widget, debug, log, error, config
 Requires at least: 3.3
 Tested up to: 3.5
 Stable tag: 1.0

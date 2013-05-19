@@ -23,7 +23,7 @@ Author URI: http://dsergio.com/
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-if( !class_exists( 'WP_VIEWER_LOG' ) ) : 
+if( !class_exists( 'WP_VIEWER_LOG' ) ): 
 class WP_VIEWER_LOG {
 	const wpvl_version = '1.0';
 	private
@@ -94,13 +94,6 @@ class WP_VIEWER_LOG {
 		}
     	return $links;
 	}
-	private function wpvl_init_only_admin(){
-		// Private Function to check permissions
-		if( current_user_can( 'activate_plugins' ) )
-			return true;
-		else
-			return false;
-	}
 	function wpvl_admin_options(){
 		register_setting( 'wpvl-register', 'wpvl-options', array( $this, 'wpvl_validate' ) );
 		add_settings_section( 'wpvl_general', '', '__return_false', 'wpvl_settings' );
@@ -121,8 +114,7 @@ class WP_VIEWER_LOG {
 		if( $output['wpvl_custom_code'] === '1' || $output['wpvl_custom_code'] === '2' ) // remove custom code in textarea
 			$output['wpvl_text_wp_config'] = '';
 		if( $output['no_overwrite'] != $output['wpvl_custom_code'] )
-			$output['no_overwrite'] = $output['wpvl_custom_code'];
-			
+			$output['no_overwrite'] = $output['wpvl_custom_code'];	
 		return apply_filters( 'wpvl_validate', $output, $input );
 	}
 	function setting_wpvl_enable_widget(){
@@ -208,7 +200,7 @@ class WP_VIEWER_LOG {
 			<div id="tab-view-log">
 			<?php echo $this->wpvl_read_file( 'log' ); ?>
 			<form method="post" action="">
-			<p class="submit"><?php submit_button( __( 'Clear Log', 'wpvllang' ), 'delete', 'clear-log', false ); ?></p>
+			<?php submit_button( __( 'Clear Log', 'wpvllang' ), 'delete', 'clear-log' ); ?>
 			</form>
 			</div>
 			</div><!-- .wrap -->
@@ -237,8 +229,8 @@ class WP_VIEWER_LOG {
 <?php
 		settings_fields( 'wpvl-register' ); 
 		do_settings_sections( 'wpvl_settings' );
+		submit_button( null, 'primary', 'submit' );
 ?>
-		<p class="submit"><?php submit_button( '', 'primary', 'submit', false ); ?></p>
 		</form>
 		</div><!-- #tab-options -->
 <?php
@@ -273,16 +265,16 @@ class WP_VIEWER_LOG {
 <?php
     }
 	function wpvl_page_scripts(){
-		if( !$this->wpvl_init_only_admin() )
+		if( !current_user_can( 'activate_plugins' ) )
 			return;
 		//wp_register_script( 'wpvl-scripts', plugins_url( 'include/javascript/dev/jquery.wpvl.js', __FILE__ ), array( 'jquery' ), self::wpvl_version, false );
 		wp_register_script( 'wpvl-scripts', plugins_url( 'include/javascript/jquery.wpvl.min.js', __FILE__ ), array( 'jquery' ), self::wpvl_version, false );
-		wp_enqueue_script( 'wpvl-scripts' );
 		wp_register_style( 'wpvl-styles', plugins_url( 'include/css/wpvl-styles.css', __FILE__ ), array(), self::wpvl_version, 'all' );
+		wp_enqueue_script( 'wpvl-scripts' );
 		wp_enqueue_style( 'wpvl-styles' );
 	}
 	function wpvl_enable_widget(){
-		if( isset( $this->wpvl_options['wpvl_enable_widget'] ) && $this->wpvl_init_only_admin() ){
+		if( isset( $this->wpvl_options['wpvl_enable_widget'] ) && current_user_can( 'activate_plugins' ) ){
 			add_action( 'wp_dashboard_setup', array( $this, 'wpvl_add_dashboard_widgets' ) );
 			add_action( 'wp_network_dashboard_setup', array( $this, 'wpvl_add_dashboard_widgets' ) );
 		}
@@ -478,7 +470,7 @@ class WP_VIEWER_LOG {
 			$conf = file( $this->conf_original );
 			$i = 0;
 			foreach( $conf as $line => $text ){
-				if ( (substr( str_replace( ' ', '', $text ), 8, 8 ) === 'WP_DEBUG') || (substr( str_replace( ' ', '', $text ), 8, 9 ) === 'WP_DEBUG') ){
+				if ( ( substr( str_replace( ' ', '', $text ), 8, 8 ) === 'WP_DEBUG' ) || ( substr( str_replace( ' ', '', $text ), 8, 9 ) === 'WP_DEBUG' ) ){
 					$nline = $i;
 					$conf[$line] = '';			
 					break;
@@ -492,8 +484,7 @@ class WP_VIEWER_LOG {
 					@fwrite( $new_conf, $line );
 				@fclose( $new_conf );
 			} else {
-				if( isset( $_REQUEST['page'] ) )
-					if( $_REQUEST['page'] === 'wp-viewer-log-options' ){
+				if( isset( $_REQUEST['page'] ) && $_REQUEST['page'] === 'wp-viewer-log-options' ){
 						add_action( 'admin_notices', function(){
 								echo '<div class="error fade"><p>' . __( 'For security has not been edited wp-config.php file, edit it manually.', 'wpvllang' ) . '</p></div>';
 							}
@@ -513,7 +504,7 @@ class WP_VIEWER_LOG {
 	}
 	function wpvl_add_admin_bar_item( $admin_bar ){
 		if( $this->wpvl_options['wpvl_enable_admin_bar'] != '1' ){
-			if( !$this->wpvl_init_only_admin() )
+			if( !current_user_can( 'activate_plugins' ) )
 				return;
 			$frontend = ( $this->wpvl_options['wpvl_enable_admin_bar'] === '3' ) ? true : false;
 			$num = $this->total_errors;
