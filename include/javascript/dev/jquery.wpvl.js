@@ -11,7 +11,13 @@ jQuery(document).ready(function($){
 		check_input();
 	});
 	$('div.wpvl-content').hide();
-	$('div.wpvl-content:first').show();
+	if(window.location.href.indexOf('&') > -1 && $('#setting-error-clear_log').length != 1 ){
+		$('div.wpvl-content').eq(1).show();
+		$('h3.nav-tab-wrapper a:first').removeClass('nav-tab-active');
+		$('h3.nav-tab-wrapper a').eq(1).addClass('nav-tab-active');
+	} else {
+		$('div.wpvl-content:first').show();
+	}
 	$('h3.nav-tab-wrapper a').css('outline','none').click(function(e){
 		e.preventDefault();
 		$('h3.nav-tab-wrapper a').removeClass('nav-tab-active');
