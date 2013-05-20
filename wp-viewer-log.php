@@ -40,9 +40,6 @@ class WP_VIEWER_LOG {
 			'wpvl_text_wp_config'		=>	''
 		);
 	function __construct(){
-		register_activation_hook( __FILE__, array( $this, 'wpvl_activate' ) );
-		register_deactivation_hook( __FILE__, array( $this, 'wpvl_deactivate' ) );
-		add_action( 'plugins_loaded', array( $this, 'wpvl_update' ) );
 		add_action( 'init', array( $this, 'wpvl_init' ) );
 		add_action( 'admin_init', array( $this, 'wpvl_enable_widget' ) );
 		add_action( 'admin_init', array( $this, 'wpvl_admin_options' ) );
@@ -60,6 +57,9 @@ class WP_VIEWER_LOG {
 		$this->conf_backup = ABSPATH . 'wp-config-backup.php';
 		$this->conf_original = ABSPATH . 'wp-config.php';
 		$this->total_errors = $this->wpvl_read_file( 'bubble', false );
+		register_activation_hook( __FILE__, array( $this, 'wpvl_activate' ) );
+		register_deactivation_hook( __FILE__, array( $this, 'wpvl_deactivate' ) );
+		add_action( 'activate_wp-viewer-lop/wp-viewer-log.php', array( $this, 'wpvl_saved_options' ) );
 	}
 	function wpvl_init(){
 		global $wp_version;
@@ -68,17 +68,7 @@ class WP_VIEWER_LOG {
   		load_plugin_textdomain( 'wpvllang', false, dirname( plugin_basename( __FILE__ ) ) . '/include/languages/' );		
 	}
 	function wpvl_activate(){	
-		if( isset( $this->wpvl_options['wpvl_custom_code'] ) ){
-			foreach( $this->wpvl_options as $option => $value ){
-				foreach( $this->wpvl_options_defaults as $doption => $dvalue ){
-					if( $option == $doption )
-						$this->wpvl_options_defaults[$doption] = $this->wpvl_options[$option];
-				}
-			}
-			update_option( 'wpvl-options', $this->wpvl_options_defaults );
-		} else {
-			add_option( 'wpvl-options', $this->wpvl_options_defaults );
-		}
+		$this->wpvl_saved_options();
 	}
 	function wpvl_deactivate(){
 		if( file_exists( $this->conf_backup ) )
@@ -87,16 +77,15 @@ class WP_VIEWER_LOG {
 			@unlink( $this->wpvl_log_errors ); // Delete debug.log file
 		delete_option( 'wpvl-options' );
 	}
-	function wpvl_update(){
+	function wpvl_saved_options(){
+		if( !empty( $this->wpvl_options ) ){
 		// update plugin
-		if( isset( $this->wpvl_options['wpvl_custom_code'] ) && !isset( $this->wpvl_options['wpvl_enable_admin_bar'] ) ){
 			foreach( $this->wpvl_options as $option => $value ){
-				foreach( $this->wpvl_options_defaults as $doption => $dvalue ){
-					if( $option == $doption )
-						$this->wpvl_options_defaults[$doption] = $this->wpvl_options[$option];
-				}
+				$this->wpvl_options_defaults[$option] = $this->wpvl_options[$option];
 			}
 			update_option( 'wpvl-options', $this->wpvl_options_defaults );
+		} else {
+			add_option( 'wpvl-options', $this->wpvl_options_defaults );
 		}
 	}
 	function wpvl_plugin_action_links( $links, $file ){
