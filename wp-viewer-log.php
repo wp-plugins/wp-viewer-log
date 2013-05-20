@@ -40,6 +40,9 @@ class WP_VIEWER_LOG {
 			'wpvl_text_wp_config'		=>	''
 		);
 	function __construct(){
+		register_activation_hook( __FILE__, array( $this, 'wpvl_activate' ) );
+		register_deactivation_hook( __FILE__, array( $this, 'wpvl_deactivate' ) );
+		add_action( 'plugins_loaded', array( $this, 'wpvl_update' ) );
 		add_action( 'init', array( $this, 'wpvl_init' ) );
 		add_action( 'admin_init', array( $this, 'wpvl_enable_widget' ) );
 		add_action( 'admin_init', array( $this, 'wpvl_admin_options' ) );
@@ -57,9 +60,6 @@ class WP_VIEWER_LOG {
 		$this->conf_backup = ABSPATH . 'wp-config-backup.php';
 		$this->conf_original = ABSPATH . 'wp-config.php';
 		$this->total_errors = $this->wpvl_read_file( 'bubble', false );
-		register_activation_hook( __FILE__, array( $this, 'wpvl_activate' ) );
-		register_deactivation_hook( __FILE__, array( $this, 'wpvl_deactivate' ) );
-		$this->wpvl_update();
 	}
 	function wpvl_init(){
 		global $wp_version;
