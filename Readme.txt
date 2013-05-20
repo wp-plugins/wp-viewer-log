@@ -1,33 +1,35 @@
 ﻿=== WP Viewer Log ===
-Contributors: 23r9i0
+Contributors: 23r9i0 
 Donate link:
-Tags: Dashboard, widget, debug, log, error, config
-Requires at least: 3.3
+Tags: Dashboard, widget, debug, log
+Requires at least: 3.5
 Tested up to: 3.5
-Stable tag: 1.0
+Stable tag: 0.1
 License: GPL/MIT
 
 Lets see how many errors have had in the present day through a widget, configure your wp-config.php and see the file log to a maximum of 100 lines.
 
 == Description ==
 
-Add widget into Dashboard for view the day errors, view full log in page this plugin and configure the wp-config.php (optional) and add link to view errors in admin bar
+Add widget into Dashboard for view de day errors, view full log in page this plugin and configure the wp-config.php (optional)
 
 
-Añade un widget en el escritorio para ver los errores del dia, ver el log completo en la página del plugin y configurar el wp-config.php (optional) y añadir un enlace para ver los errores en la barra de administración
+Añade un widget en el escritorio para ver los errores del dia, ver el log completo en la página del plugin y configurar el wp-config.php (optional)
 
 == Installation ==
 
-* Upload the 'wp-viewer-log' folder to the '/wp-content/plugins/' directory.
-* Activate the plugin through the 'Plugins' menu in WordPress.
-* To customize the wp-config.php, go to the options page in the WPVL in WordPress admin panel.
+1. Upload the 'wp-viewer-log' folder to the '/wp-content/plugins/' directory
+2. Activate the plugin through the 'Plugins' menu in WordPress
+3. To customize the wp-config.php, go to the options page in the General Options in WordPress admin panel
+
+
+
+1. Suba la carpeta 'wp-viewer-log' dentro del directorio '/wp-content/plugins/'
+2. Activar el plugin a través del menú 'Plugins' en WordPress
+3. Si desea personalizar el wp-config.php, vaya a la página de opciones dentro de Opciones generales en el panel de administración de WordPress
 
 == Changelog ==
-
-= 1.0 =
-* Redesign plugin class
-* Create Custom menu page
-* Add new options
-* Disable overwrite wp-config.php
 = 0.1 =
 * initial release
+
+== Screenshots ==
