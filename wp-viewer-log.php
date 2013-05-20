@@ -59,7 +59,6 @@ class WP_VIEWER_LOG {
 		$this->total_errors = $this->wpvl_read_file( 'bubble', false );
 		register_activation_hook( __FILE__, array( $this, 'wpvl_activate' ) );
 		register_deactivation_hook( __FILE__, array( $this, 'wpvl_deactivate' ) );
-		add_action( 'activate_wp-viewer-lop/wp-viewer-log.php', array( $this, 'wpvl_saved_options' ) );
 	}
 	function wpvl_init(){
 		global $wp_version;
@@ -83,9 +82,9 @@ class WP_VIEWER_LOG {
 			foreach( $this->wpvl_options as $option => $value ){
 				$this->wpvl_options_defaults[$option] = $this->wpvl_options[$option];
 			}
-			update_option( 'wpvl-options', $this->wpvl_options_defaults );
+			return update_option( 'wpvl-options', $this->wpvl_options_defaults );
 		} else {
-			add_option( 'wpvl-options', $this->wpvl_options_defaults );
+			return add_option( 'wpvl-options', $this->wpvl_options_defaults );
 		}
 	}
 	function wpvl_plugin_action_links( $links, $file ){
