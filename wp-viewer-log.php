@@ -59,23 +59,13 @@ class WP_VIEWER_LOG {
 		$this->total_errors = $this->wpvl_read_file( 'bubble', false );
 		register_activation_hook( __FILE__, array( $this, 'wpvl_activate' ) );
 		register_deactivation_hook( __FILE__, array( $this, 'wpvl_deactivate' ) );
+		$this->wpvl_update();
 	}
 	function wpvl_init(){
 		global $wp_version;
 		if ( version_compare( $wp_version, '3.3', '< ' ) )
 			wp_die( __( 'This plugin requires WordPress 3.3 or greater.', 'wpvllang' ) );
-  		load_plugin_textdomain( 'wpvllang', false, dirname( plugin_basename( __FILE__ ) ) . '/include/languages/' );
-		// fix update plugin
-		if( isset( $this->wpvl_options['wpvl_custom_code'] ) && !isset( $this->wpvl_options['wpvl_enable_admin_bar'] ) ){
-			foreach( $this->wpvl_options as $option => $value ){
-				foreach( $this->wpvl_options_defaults as $doption => $dvalue ){
-					if( $option == $doption )
-						$this->wpvl_options_defaults[$doption] = $this->wpvl_options[$option];
-				}
-			}
-			update_option( 'wpvl-options', $this->wpvl_options_defaults );
-		}
-		
+  		load_plugin_textdomain( 'wpvllang', false, dirname( plugin_basename( __FILE__ ) ) . '/include/languages/' );		
 	}
 	function wpvl_activate(){	
 		if( isset( $this->wpvl_options['wpvl_custom_code'] ) ){
@@ -96,6 +86,18 @@ class WP_VIEWER_LOG {
 		if( substr( $this->wpvl_log_errors, -9 ) === 'debug.log' )
 			@unlink( $this->wpvl_log_errors ); // Delete debug.log file
 		delete_option( 'wpvl-options' );
+	}
+	function wpvl_update(){
+		// update plugin
+		if( isset( $this->wpvl_options['wpvl_custom_code'] ) && !isset( $this->wpvl_options['wpvl_enable_admin_bar'] ) ){
+			foreach( $this->wpvl_options as $option => $value ){
+				foreach( $this->wpvl_options_defaults as $doption => $dvalue ){
+					if( $option == $doption )
+						$this->wpvl_options_defaults[$doption] = $this->wpvl_options[$option];
+				}
+			}
+			update_option( 'wpvl-options', $this->wpvl_options_defaults );
+		}
 	}
 	function wpvl_plugin_action_links( $links, $file ){
     	if ( $file == plugin_basename( __FILE__ ) ){
