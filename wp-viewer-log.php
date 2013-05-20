@@ -65,6 +65,17 @@ class WP_VIEWER_LOG {
 		if ( version_compare( $wp_version, '3.3', '< ' ) )
 			wp_die( __( 'This plugin requires WordPress 3.3 or greater.', 'wpvllang' ) );
   		load_plugin_textdomain( 'wpvllang', false, dirname( plugin_basename( __FILE__ ) ) . '/include/languages/' );
+		// fix update plugin
+		if( isset( $this->wpvl_options['wpvl_custom_code'] ) && !isset( $this->wpvl_options['wpvl_enable_admin_bar'] ) ){
+			foreach( $this->wpvl_options as $option => $value ){
+				foreach( $this->wpvl_options_defaults as $doption => $dvalue ){
+					if( $option == $doption )
+						$this->wpvl_options_defaults[$doption] = $this->wpvl_options[$option];
+				}
+			}
+			update_option( 'wpvl-options', $this->wpvl_options_defaults );
+		}
+		
 	}
 	function wpvl_activate(){	
 		if( isset( $this->wpvl_options['wpvl_custom_code'] ) ){
@@ -74,8 +85,7 @@ class WP_VIEWER_LOG {
 						$this->wpvl_options_defaults[$doption] = $this->wpvl_options[$option];
 				}
 			}
-			delete_option( 'wpvl-options' );
-			add_option( 'wpvl-options', $this->wpvl_options_defaults );
+			update_option( 'wpvl-options', $this->wpvl_options_defaults );
 		} else {
 			add_option( 'wpvl-options', $this->wpvl_options_defaults );
 		}
