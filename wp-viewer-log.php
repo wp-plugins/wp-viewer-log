@@ -78,6 +78,7 @@ class WP_VIEWER_LOG {
 	}
 	function wpvl_saved_options(){
 		if( !empty( $this->wpvl_options ) ){
+			die( var_dump( $this->wpvl_options ) );
 		// update plugin
 			foreach( $this->wpvl_options as $option => $value ){
 				$this->wpvl_options_defaults[$option] = $this->wpvl_options[$option];
@@ -503,7 +504,7 @@ class WP_VIEWER_LOG {
 		}
 	}
 	function wpvl_add_admin_bar_item( $admin_bar ){
-		if( $this->wpvl_options['wpvl_enable_admin_bar'] != '1' ){
+		if( isset( $this->wpvl_options['wpvl_enable_admin_bar'] ) && $this->wpvl_options['wpvl_enable_admin_bar'] != '1' ){
 			if( !current_user_can( 'activate_plugins' ) )
 				return;
 			$frontend = ( $this->wpvl_options['wpvl_enable_admin_bar'] === '3' ) ? true : false;
