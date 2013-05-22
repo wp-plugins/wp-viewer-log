@@ -4,7 +4,7 @@ Plugin Name: WP Viewer Log
 Plugin URI: http://wordpress.org/extend/plugins/wp-viewer-log/
 Description: Lets see how many errors have had in the present day through a widget, configure your wp-config.php and see the file log to a maximum of 100 lines.
 Author: Sergio P.A. ( 23r9i0 )
-Version: 1.1
+Version: 1.1.1
 Author URI: http://dsergio.com/
 */
 /*  Copyright 2013  Sergio Prieto Alvarez  ( email : info@dsergio.com )
@@ -28,7 +28,7 @@ if ( !defined( 'ABSPATH' ) )
 	
 if( !class_exists( 'WP_VIEWER_LOG' ) ): 
 final class WP_VIEWER_LOG {
-	const wpvl_version = '1.1';
+	const wpvl_version = '1.1.1';
 	private
 		$total_errors,
 		$wpvl_log_errors,
@@ -88,6 +88,7 @@ final class WP_VIEWER_LOG {
 				$this->wpvl_options_defaults[$option] = $this->wpvl_options[$option];
 			}
 			update_option( 'wpvl-options', $this->wpvl_options_defaults );
+		} elseif( get_option( 'wpvl-options' ) && !get_option( 'wpvl-version' ) ){
 			add_option( 'wpvl-version', array('version' => self::wpvl_version ) );
 		} elseif( !get_option( 'wpvl-options' ) ) { // check options and add_options
 			add_option( 'wpvl-options', $this->wpvl_options_defaults );
