@@ -4,7 +4,7 @@ Plugin Name: WP Viewer Log
 Plugin URI: http://wordpress.org/extend/plugins/wp-viewer-log/
 Description: Lets see how many errors have had in the present day through a widget, configure your wp-config.php and see the file log to a maximum of 100 lines.
 Author: Sergio P.A. ( 23r9i0 )
-Version: 1.0
+Version: 1.1
 Author URI: http://dsergio.com/
 */
 /*  Copyright 2013  Sergio Prieto Alvarez  ( email : info@dsergio.com )
@@ -23,9 +23,12 @@ Author URI: http://dsergio.com/
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+if ( !defined( 'ABSPATH' ) )
+	exit;
+	
 if( !class_exists( 'WP_VIEWER_LOG' ) ): 
-class WP_VIEWER_LOG {
-	const wpvl_version = '1.0';
+final class WP_VIEWER_LOG {
+	const wpvl_version = '1.1';
 	private
 		$total_errors,
 		$wpvl_log_errors,
@@ -41,6 +44,10 @@ class WP_VIEWER_LOG {
 		);
 	function __construct(){
 		add_action( 'init', array( $this, 'wpvl_init' ) );
+		if( is_admin() )
+			add_action( 'admin_init', array( $this, 'wpvl_show_total_errors' ), 99 ); // return number error admin
+		else
+			add_action( 'init', array( $this, 'wpvl_show_total_errors' ), 99 ); // return number error frontend
 		add_action( 'admin_init', array( $this, 'wpvl_enable_widget' ) );
 		add_action( 'admin_init', array( $this, 'wpvl_admin_options' ) );
 		add_action( 'admin_init', array( $this, 'wpvl_write_wp_config' ) );
@@ -52,20 +59,18 @@ class WP_VIEWER_LOG {
 		add_filter( 'plugin_action_links', array( $this, 'wpvl_plugin_action_links' ), 10, 2 );
 		$this->wpvl_options = get_option( 'wpvl-options' );
 		$this->wpvl_log_errors = ini_get('error_log');
-		if ( !defined( 'ABSPATH' ) )
-			define( 'ABSPATH', '../' );
 		$this->conf_backup = ABSPATH . 'wp-config-backup.php';
 		$this->conf_original = ABSPATH . 'wp-config.php';
-		$this->total_errors = $this->wpvl_read_file( 'bubble', false );
 		register_activation_hook( __FILE__, array( $this, 'wpvl_activate' ) );
 		register_deactivation_hook( __FILE__, array( $this, 'wpvl_deactivate' ) );
 	}
+	
 	function wpvl_init(){
 		global $wp_version;
 		if ( version_compare( $wp_version, '3.3', '< ' ) )
 			wp_die( __( 'This plugin requires WordPress 3.3 or greater.', 'wpvllang' ) );
   		load_plugin_textdomain( 'wpvllang', false, dirname( plugin_basename( __FILE__ ) ) . '/include/languages/' );
-		$this->wpvl_saved_options();		
+		$this->wpvl_saved_options();  // check options and update first run	
 	}
 	function wpvl_activate(){	
 		$this->wpvl_saved_options();
@@ -74,18 +79,19 @@ class WP_VIEWER_LOG {
 		if( file_exists( $this->conf_backup ) )
 			rename( $this->conf_backup, $this->conf_original ); // Restore Original wp-config.php
 		if( substr( $this->wpvl_log_errors, -9 ) === 'debug.log' )
-			@unlink( $this->wpvl_log_errors ); // Delete debug.log file
+			unlink( $this->wpvl_log_errors ); // Delete debug.log file only
 		delete_option( 'wpvl-options' );
 	}
 	function wpvl_saved_options(){
-		if( !isset( $this->wpvl_options['wpvl_enable_admin_bar'] ) ){
-		// update plugin
+		if( get_option( 'wpvl-options' ) && !isset( $this->wpvl_options['wpvl_enable_admin_bar'] ) ){ // update plugin options
 			foreach( $this->wpvl_options as $option => $value ){
 				$this->wpvl_options_defaults[$option] = $this->wpvl_options[$option];
 			}
-			return update_option( 'wpvl-options', $this->wpvl_options_defaults );
-		} else {
-			return add_option( 'wpvl-options', $this->wpvl_options_defaults );
+			update_option( 'wpvl-options', $this->wpvl_options_defaults );
+			add_option( 'wpvl-version', array('version' => self::wpvl_version ) );
+		} elseif( !get_option( 'wpvl-options' ) ) { // check options and add_options
+			add_option( 'wpvl-options', $this->wpvl_options_defaults );
+			add_option( 'wpvl-version', array('version' => self::wpvl_version ) );
 		}
 	}
 	function wpvl_plugin_action_links( $links, $file ){
@@ -107,7 +113,7 @@ class WP_VIEWER_LOG {
 	}
 	function wpvl_validate( $input ){
 		$output = array();
-		$output['no_overwrite'] = '0'; // Define internal option for disable overwrite wp-config.php
+		$output['no_overwrite'] = '0'; // Define internal option for disable overwrite wp-config.php file
 		foreach( $input as $key => $value ){
 			if( isset( $input[$key] ) )
 				$output[$key] = $input[$key];
@@ -153,6 +159,11 @@ class WP_VIEWER_LOG {
 <?php
 	}
 	function setting_wpvl_custom_code(){
+		// Restore to disabled after check error write wp-config.php
+		$reset = get_option( 'wpvl-options' );
+		if( isset( $reset['wpvl_custom_code_error'] ) )
+			$this->wpvl_options['wpvl_custom_code'] = 1;
+		unset($reset);
 ?>
 		<p>
 		<label>
@@ -189,22 +200,22 @@ class WP_VIEWER_LOG {
 	}
 	function wpvl_page_log(){
 ?>
-			<div class="wrap">
-			<?php screen_icon( 'wp-viewer-log' ); ?>
-			<h2><?php printf( __( 'WP Viewer Log - Version: %s', 'wpvllang' ), self::wpvl_version ); ?></h2>
+		<div class="wrap">
+		<?php screen_icon( 'wp-viewer-log' ); ?>
+		<h2><?php printf( __( 'WP Viewer Log - Version: %s', 'wpvllang' ), self::wpvl_version ); ?></h2>
 <?php
 		if ( isset( $_POST['clear-log'] ) ) {
     		echo '<div class="updated fade"><p>' . __( 'Cleared Log', 'wpvllang' ) . '</p></div>';
 		}
 ?>
-			<h3><?php _e( 'Current Log', 'wpvllang' ); ?></h3>
-			<div id="tab-view-log">
-			<?php echo $this->wpvl_read_file( 'log' ); ?>
-			<form method="post" action="">
-			<?php submit_button( __( 'Clear Log', 'wpvllang' ), 'delete', 'clear-log' ); ?>
-			</form>
-			</div>
-			</div><!-- .wrap -->
+		<h3><?php _e( 'Current Log', 'wpvllang' ); ?></h3>
+		<div id="tab-view-log">
+     	<?php echo $this->wpvl_read_file( 'log' ); ?>
+		<form method="post" action="">
+		<?php submit_button( __( 'Clear Log', 'wpvllang' ), 'delete', 'clear-log' ); ?>
+		</form>
+		</div>
+		</div><!-- .wrap -->
 <?php
 	}
 	function wpvl_page_options(){
@@ -216,13 +227,20 @@ class WP_VIEWER_LOG {
 		if ( isset( $_GET['settings-updated'] ) ) {
     		echo '<div class="updated fade"><p>' . __( 'Settings saved.' ) . '</p></div>';
 		}
+		if( isset( $this->wpvl_options['wpvl_show_wp_config'] ) && $this->wpvl_options['wpvl_show_wp_config'] === '1' ){
 ?>
-		<div id="wpvl-tabs">
-		<h3 class="nav-tab-wrapper">
-		<a class="nav-tab  nav-tab-active" href="#tab-options"><?php _e( 'Plugin Options', 'wpvllang' ); ?></a>
+			<div id="wpvl-tabs">
+			<h3 class="nav-tab-wrapper">
+			<a class="nav-tab  nav-tab-active" href="#tab-options"><?php _e( 'Plugin Options', 'wpvllang' ); ?></a>
+        	<a class="nav-tab" href="#tab-view-wp-config"><?php _e( 'Current WP Config File', 'wpvllang' ); ?></a>
 <?php
-		if( isset($this->wpvl_options['wpvl_show_wp_config']) && $this->wpvl_options['wpvl_show_wp_config'] === '1' )
-			echo '<a class="nav-tab" href="#tab-view-wp-config">' . __( 'Current WP Config File', 'wpvllang' ) . '</a>';
+		} else {
+?>
+			<div>
+			<h3>
+<?php
+			_e( 'Plugin Options', 'wpvllang' );
+		}
 ?>
 		</h3>
 		<div id="tab-options" class="wpvl-content">
@@ -311,8 +329,9 @@ class WP_VIEWER_LOG {
 						}
 						$echo .= '</td><td class="code">';
 						foreach( $file as $line => $text ){
+							$text = str_replace(array("\r\n", "\r", "\n"), '', $text ); // occasional line breaks removed
 							$echo .= '<div>';
-							$echo .= esc_html( $text );
+							$echo .= $text;
 							$echo .= '</div>';
 						}
 					} else {
@@ -322,8 +341,9 @@ class WP_VIEWER_LOG {
 						$echo .= '</td><td class="code">';
 						$file = array_slice( $file, 0, 100 );
 						foreach( $file as $line => $text ){
+							$text = str_replace(array("\r\n", "\r", "\n"), '', $text ); // occasional line breaks removed
 							$echo .= '<div>';
-							$echo .= esc_html( $text );
+							$echo .= $text;
 							$echo .= '</div>';
 						}
 					}
@@ -408,7 +428,7 @@ class WP_VIEWER_LOG {
 					$echo .= '</td><td class="code">';
 					foreach( $file as $line => $text ){
 						$echo .= '<div>';
-						$echo .= esc_html( $text );
+						$echo .= $text;
 						$echo .= '</div>';
 					}
 					$echo .= '</td></tr></tbody></table>';
@@ -429,9 +449,9 @@ class WP_VIEWER_LOG {
 		unset( $echo );
 	}
 	function wpvl_write_wp_config(){
-		$text_comment = "\n\n// " . __( 'Added from the plugin WP Viewer Log', 'wpvllang' ) . "\n\n";
-		$text_custom_comment = "\n\n// " . __( 'Added from the plugin WP Viewer Log with custom code', 'wpvllang' ) . "\n\n";
-		if( isset( $_GET['page'] ) && $_GET['page'] === 'wp-viewer-log-options' && isset( $_GET['settings-updated'] ) && $this->wpvl_options['no_overwrite'] != $this->wpvl_options['wpvl_custom_code'] ){
+		$text_comment = "\n// " . __( 'Added from the plugin WP Viewer Log', 'wpvllang' ) . "\n";
+		$text_custom_comment = "\n// " . __( 'Added from the plugin WP Viewer Log with custom code', 'wpvllang' ) . "\n";
+		if( isset( $_GET['page'] ) && $_GET['page'] === 'wp-viewer-log-options' && isset( $_GET['settings-updated'] ) && $this->wpvl_options['no_overwrite'] === $this->wpvl_options['wpvl_custom_code'] ){
 			switch( $this->wpvl_options['wpvl_custom_code'] ){
 				case '1': // Reset
 					if( file_exists( $this->conf_backup ) )
@@ -446,7 +466,7 @@ class WP_VIEWER_LOG {
 						"\tdefine( 'WP_DEBUG_LOG', true );\n",
 						"\tdefine( 'WP_DEBUG_DISPLAY', false );\n",
 						"\t@ini_set( 'display_errors',0 );\n",
-						"}"
+						"}\n"
 					);
 					array_unshift( $wpvl_text, $text_comment );
 					array_push( $wpvl_text, $text_comment );
@@ -480,28 +500,35 @@ class WP_VIEWER_LOG {
 			}
 			if( isset( $nline ) ){
 				array_splice( $conf, $nline, 0, $wpvl_text );
-				$new_conf = @fopen( $this->conf_original, 'w' );
+				$new_conf = fopen( $this->conf_original, 'w' );
 				foreach( $conf as $line )
-					@fwrite( $new_conf, $line );
-				@fclose( $new_conf );
+					fwrite( $new_conf, $line );
+				fclose( $new_conf );
 			} else {
+				// Define error and update options to check in function setting_wpvl_custom_code() to disable custom code
 				if( isset( $_REQUEST['page'] ) && $_REQUEST['page'] === 'wp-viewer-log-options' ){
 						add_action( 'admin_notices', function(){
 								echo '<div class="error fade"><p>' . __( 'For security has not been edited wp-config.php file, edit it manually.', 'wpvllang' ) . '</p></div>';
 							}
 						);
+					$reset = $this->wpvl_options;
+					$reset['wpvl_custom_code_error'] = '1';
+					update_option( 'wpvl-options', $reset );
+					unset($reset);
 				}
 			}
 		}
 	}
 	function wpvl_clear_log(){
-		if( isset( $_POST['clear-log'] ) ){			
+		if( isset( $_POST['clear-log'] ) ){	
 			if( file_exists( $this->wpvl_log_errors ) ){
-				$clear = @fopen( $this->wpvl_log_errors, 'w' );
+				$clear = fopen( $this->wpvl_log_errors, 'w' );
 				unset($clear);
-			}
-				
+			}		
 		}
+	}
+	function wpvl_show_total_errors(){
+		return $this->total_errors = $this->wpvl_read_file( 'bubble', false ); // Define value in private var total_errors
 	}
 	function wpvl_add_admin_bar_item( $admin_bar ){
 		if( isset( $this->wpvl_options['wpvl_enable_admin_bar'] ) && $this->wpvl_options['wpvl_enable_admin_bar'] != '1' ){
@@ -511,18 +538,19 @@ class WP_VIEWER_LOG {
 			$num = $this->total_errors;
 			$text = ( $num > 1 ) ? __( 'Errors', 'wpvllang' ) : __( 'Error', 'wpvllang' );
 			$title = sprintf( '<span style="color:red" class="count-%1s"> %2s %3s</span>', $num, number_format_i18n( $num ), $text );
-			if( $num > 0 )
+			if( $num > 0 ){ 
 				if( is_admin() || $frontend ){
-					$admin_bar->add_menu( array(
+					$admin_bar->add_node( array(
 						'id'		=>	'wpvl-add-link-errors',
 						'title'		=>	$title,
 						'href'		=>	admin_url( 'admin.php?page=wp-viewer-log' ),
 						'meta'		=>	array( 
-											'title' =>  __( 'View Log', 'wpvllang' ),
-											'target' => '_blank'
+											'title'		=>	__( 'View Log', 'wpvllang' ),
+											'target'	=>	'_blank'
 										)
 					) );
 				}
+			}
 		}
 	}
 	function count_bubble(){
@@ -536,6 +564,7 @@ class WP_VIEWER_LOG {
 			}
 		}
 		return $menu;
+		unset( $menu );
 	}
 }
 $wpvl = new WP_VIEWER_LOG;
