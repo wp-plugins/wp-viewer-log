@@ -565,7 +565,6 @@ final class WP_VIEWER_LOG {
 			}
 		}
 		return $menu;
-		unset( $menu );
 	}
 }
 $wpvl = new WP_VIEWER_LOG;
