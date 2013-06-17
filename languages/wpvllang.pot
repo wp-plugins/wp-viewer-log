@@ -1,0 +1,216 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WP Viewer Log\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-06-17 11:13+0100\n"
+"PO-Revision-Date: 2013-06-17 11:13+0100\n"
+"Last-Translator: Sergio P.A. <info@dsergio.com>\n"
+"Language-Team: Sergio P.A. <info@dsergio.com>\n"
+"Language: en_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: Poedit 1.5.5\n"
+"X-Poedit-SearchPath-0: D:\\UniServer\\www\\wp\\wp-content\\plugins\\wp-"
+"viewer-log\n"
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:129
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:430
+msgid "Options"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:141
+msgid "This plugin requires WordPress 3.3 or greater."
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:197
+msgid "Error to load wp-config.php."
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:204
+msgid "Error to load log file."
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:217
+msgid "Errors"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:217
+msgid "Error"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:226
+msgid "View Log"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:262
+msgid "I delete the contents of log."
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:266
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:563
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:565
+msgid "Added from the plugin WP Viewer Log"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:267
+msgid "Added from the plugin WP Viewer Log with custom code"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:332
+msgid "For security has not been edited wp-config.php file, edit it manually."
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:342
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:456
+#, php-format
+msgid "%1sWithout Error%2s"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:346
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:367
+msgid "Options Plugin"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:352
+msgid "Type"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:352
+msgid "No."
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:370
+msgid "View Full Log"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:384
+msgid "Dashboard widget:"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:387
+msgid "Link on Admin Bar:"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:389
+msgid "Define Target:"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:391
+msgid "<strong>Advanced Settings</strong>"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:393
+msgid "View wp-config.php:"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:396
+msgid "Add Code:"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:398
+msgid "Your custom code:"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:429
+msgid "WPVL Log"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:429
+msgid "Log"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:430
+msgid "WPVL Options"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:438
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:474
+#, php-format
+msgid "WP Viewer Log - Version: %s"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:463
+msgid "Clear Log"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:477
+msgid "Settings saved."
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:483
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:489
+msgid "Plugin Options"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:484
+msgid "Current WP Config File"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:542
+msgid "Info"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:548
+msgid "Important"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:556
+msgid "- You can add a widget on the desktop, by default is enabled."
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:557
+msgid ""
+"- If you activate the admin bar link will be displayed only when there are "
+"errors and select target to open link."
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:558
+msgid "- Edit the wp-config.php file to configure the WP_DEBUG."
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:559
+msgid "- The default code is:"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:574
+msgid ""
+"- If you manually add code after using the plugin were eliminated because "
+"they always used the copy for editing."
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:575
+msgid ""
+"- If you disable the custom code file wp-config.php will be restored to its "
+"original state before activating the plugin."
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:576
+msgid ""
+"- If you configure your wp-config.php without the plugin, the widget as the "
+"page log work."
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:592
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:644
+msgid "Disabled"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:598
+msgid "Enable"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:604
+msgid "Also enabled on Front End"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:650
+msgid "Enabled"
+msgstr ""
+
+#: D:\UniServer\www\wp\wp-content\plugins\wp-viewer-log/wp-viewer-log.php:656
+msgid "Custom Code"
+msgstr ""
