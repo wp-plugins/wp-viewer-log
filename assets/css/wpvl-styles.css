@@ -1,3 +1,4 @@
+#tab-view-log {margin-top:10px}
 .wpvl-html *{margin:0;padding:0}
 .wpvl-html{overflow:auto;max-height:350px;border-radius:3px;-webkit-border-radius:3px;border:1px solid}
 .wpvl-html.conf{max-height:100%}
@@ -8,7 +9,6 @@
 .wpvl-html.wpvl-widget th{font-family:sans-serif;color:#fff}
 .wpvl-html.wpvl-widget td{border-top:1px solid}
 .wpvl-html .str{font-family:sans-serif;padding:1em;text-align:center}
-.wpvl-html .str.error{color:red}
 .wpvl-widget-buttons{margin-top:1em}
 .wpvl-widget-buttons p.submit.options{float:left!important;padding-left:0!important}
 .wpvl-widget-buttons p.submit.view{padding-right:0!important}

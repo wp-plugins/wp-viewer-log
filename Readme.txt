@@ -1,20 +1,20 @@
 === WP Viewer Log ===
 Contributors: 23r9i0
 Donate link:
-Tags: Dashboard, widget, debug, log, error, config
+Tags: debug, log, error, config, php, admin, admin bar, dashboard, widget
 Requires at least: 3.3
 Tested up to: 3.5
-Stable tag: 1.1.3
+Stable tag: 2.0
 License: GPL/MIT
 
-Lets see how many errors have had in the present day through a widget, configure your wp-config.php and see the file log to a maximum of 100 lines.
+Lets see how many errors have had in the present day through a widget, configure your wp-config.php and see the file log.
 
 == Description ==
 
-Add widget into Dashboard for view the day errors, view full log in page this plugin and configure the wp-config.php (optional) and add link to view errors in admin bar
+Add widget into Dashboard for view the day errors, view full log in page this plugin, configure the wp-config.php (optional) and add link to view errors in admin bar (optional)
 
 
-Añade un widget en el escritorio para ver los errores del dia, ver el log completo en la página del plugin y configurar el wp-config.php (optional) y añadir un enlace para ver los errores en la barra de administración
+Añade un widget en el escritorio para ver los errores del dia, ver el log completo en la página del plugin, configurar el wp-config.php (opcional) y añadir un enlace para ver los errores en la barra de administración (opcional)
 
 == Installation ==
 
@@ -23,18 +23,6 @@ Añade un widget en el escritorio para ver los errores del dia, ver el log compl
 * To customize the wp-config.php, go to the options page in the WPVL in WordPress admin panel.
 
 == Changelog ==
-= 1.1.3 =
-* fix update count bubble
-= 1.1.2 =
-* fix casual undefined foreach $menu
-= 1.1.1 =
-* fix issue add_option
-= 1.1 =
-* Add diferents internal options and fix various issues
-= 1.0 =
-* Redesign plugin class
-* Create Custom menu page
-* Add new options
-* Disable overwrite wp-config.php
-= 0.1 =
-* initial release
+= 2.0 =
+* rewrite plugin and fix various issues
+* deleted older version
