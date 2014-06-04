@@ -1,4 +1,4 @@
-=== WP Viewer Log ===
+=== WP Viewer Log === 
 Contributors: 23r9i0
 Donate link:
 Tags: debug, log, error, config, php, admin, admin bar, dashboard, widget
