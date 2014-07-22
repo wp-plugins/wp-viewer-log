@@ -78,7 +78,7 @@ final class WP_VIEWER_LOG {
 	private function __construct() {
 		if ( ! current_user_can( 'activate_plugins' ) )
 			return;
-		
+
 		self::$options = get_option( 'wpvl-options' );
 		self::$file_log = ini_get( 'error_log' );
 		self::$file_config = ABSPATH . 'wp-config.php';
@@ -121,7 +121,7 @@ final class WP_VIEWER_LOG {
 		add_action( 'admin_bar_menu', array( $this, 'admin_bar_item' ), 99 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue' ) );
 		add_action( 'all_admin_notices', array( $this, 'add_notices' ) );
-		
+
 		add_filter( 'plugin_action_links', array( $this, 'plugin_action_links' ), 10, 2 );
 	}
 
@@ -163,11 +163,11 @@ final class WP_VIEWER_LOG {
 		// Restore Original wp-config.php
 		if ( file_exists( self::$file_config_bak ) )
 			rename( self::$file_config_bak, self::$file_config );
-		
+
 		// Delete file log
 		if( file_exists( self::$file_log ) )
 			unlink( self::$file_log );
-				
+
 		delete_option( 'wpvl-options' );
 	}
 
@@ -206,7 +206,7 @@ final class WP_VIEWER_LOG {
 
 			delete_transient( 'wpvl_log_error' );
 		}
-		
+
 		echo $html;
 	}
 
@@ -252,7 +252,7 @@ final class WP_VIEWER_LOG {
 		if ( isset( $_POST['clear-log'] ) ) {
 			$clear = fopen( self::$file_log, 'w' );
 			fclose( $clear );
-			// Update self::$file_log 
+			// Update self::$file_log
 			self::$file_log = ini_get( 'error_log' );
 			add_action( 'admin_notices', array( $this, 'add_notice_clear_log' ) );
 		}
@@ -261,7 +261,7 @@ final class WP_VIEWER_LOG {
 	public function add_notice_clear_log() {
 		echo '<div class="updated"><p>' . __( 'I delete the contents of log.','wpvllang' ) . '</p></div>';
 	}
-	
+
 	private function rewrite_wp_config() {
 		$text_comment = "\n// " . __( 'Added from the plugin WP Viewer Log', 'wpvllang' ) . "\n";
 		$text_custom_comment = "\n// " . __( 'Added from the plugin WP Viewer Log with custom code', 'wpvllang' ) . "\n";
@@ -276,7 +276,7 @@ final class WP_VIEWER_LOG {
 				case '2': // Add Default Code
 					if ( file_exists( self::$file_config_bak ) )
 						rename( self::$file_config_bak, self::$file_config );
-						
+
 					array_unshift( self::$text_config, $text_comment );
 					array_push( self::$text_config, $text_comment );
 					$this->write_config( self::$text_config );
@@ -284,7 +284,7 @@ final class WP_VIEWER_LOG {
 				case '3': // Add Custom Code
 					if ( file_exists( self::$file_config_bak ) )
 						rename( self::$file_config_bak, self::$file_config );
-						
+
 					self::$text_config = explode( '\n', self::$options['wpvl_text_wp_config'] );
 					array_unshift( self::$text_config, $text_custom_comment );
 					array_push( self::$text_config, $text_custom_comment );
@@ -327,11 +327,11 @@ final class WP_VIEWER_LOG {
 			}
 		}
 	}
-	
+
 	public function add_notice_error_conf() {
 		echo '<div class="error"><p>' . __( 'For security has not been edited wp-config.php file, edit it manually.', 'wpvllang' ) . '</p></div>';
 	}
-	
+
 	public function dashboard_widget() {
 		wp_add_dashboard_widget( 'wpvl_dashboard_widget', 'WP Viewer Log', array( $this, 'render_widget' ) );
 	}
@@ -339,7 +339,7 @@ final class WP_VIEWER_LOG {
 	public function render_widget() {
 		$html = '<div class="wpvl-html wpvl-widget theme-' . self::$admin_color . '"><pre>';
 		if ( empty( self::$current_log ) ) {
-			$html .= sprintf( __( '%1sWithout Error%2s','wpvllang' ), '<p class="str">','</p>' );	
+			$html .= sprintf( __( '%1sWithout Error%2s','wpvllang' ), '<p class="str">','</p>' );
 			$html .= '</pre></div>';
 			$html .= '<div class="wpvl-widget-buttons">';
 			$html .= '<p class="submit options">';
@@ -373,9 +373,9 @@ final class WP_VIEWER_LOG {
 
 		$html .= '<div class="clear"></div>';
 		// end div.wpvl-widget
-		$html .= '</div>'; 
+		$html .= '</div>';
 
-		echo $html;	
+		echo $html;
 	}
 
 	public function register_settings() {
@@ -537,20 +537,20 @@ final class WP_VIEWER_LOG {
     	if ( $screen->id != self::$subpage_hook )
 			return;
 
-		$screen->add_help_tab( array( 
-			'id' => 'wpvl-help-one', 
-			'title' => __( 'Info', 'wpvllang' ), 
-			'content' => '', 
-			'callback' => array( $this, 'tab_info' ) 
+		$screen->add_help_tab( array(
+			'id' => 'wpvl-help-one',
+			'title' => __( 'Info', 'wpvllang' ),
+			'content' => '',
+			'callback' => array( $this, 'tab_info' )
 		) );
-		$screen->add_help_tab( array( 
-			'id' => 'wpvl-help-two', 
-			'title' => __( 'Important', 'wpvllang' ), 
-			'content' => '', 
+		$screen->add_help_tab( array(
+			'id' => 'wpvl-help-two',
+			'title' => __( 'Important', 'wpvllang' ),
+			'content' => '',
 			'callback' => array( $this, 'tab_important' )
 		) );
 	}
-	
+
 	public function tab_info() {
 ?>
 		<p><?php _e( '- You can add a widget on the desktop, by default is enabled.', 'wpvllang' ); ?></p>
@@ -568,7 +568,7 @@ final class WP_VIEWER_LOG {
 		</div>
 <?php
     }
-	
+
 	public function tab_important() {
 ?>
 		<p><?php _e( '- If you manually add code after using the plugin were eliminated because they always used the copy for editing.', 'wpvllang'); ?></p>
@@ -606,7 +606,7 @@ final class WP_VIEWER_LOG {
 		</p>
 <?php
 	}
-	
+
 	public function setting_target_admin_bar() {
 ?>
 		<p>
@@ -621,7 +621,7 @@ final class WP_VIEWER_LOG {
 				<span>_self</span>
 			</label>
 		</p>
-<?php		
+<?php
 	}
 
 	public function setting_show_wp_config() {
