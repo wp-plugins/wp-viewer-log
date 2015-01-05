@@ -3,7 +3,7 @@ Contributors: 23r9i0
 Donate link:
 Tags: debug, log, error, config, php, admin, admin bar, dashboard, widget
 Requires at least: 3.3
-Tested up to: 3.5
+Tested up to: 4.1
 Stable tag: 2.0
 License: GPL/MIT
 
