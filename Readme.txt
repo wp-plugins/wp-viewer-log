@@ -3,8 +3,8 @@ Contributors: 23r9i0
 Donate link:
 Tags: debug, log, error, config, php, admin, admin bar, dashboard, widget
 Requires at least: 3.3
-Tested up to: 4.1
-Stable tag: 2.0
+Tested up to: 4.2.2
+Stable tag: 2.0.1
 License: GPL/MIT
 
 Lets see how many errors have had in the present day through a widget, configure your wp-config.php and see the file log.
@@ -23,6 +23,13 @@ Añade un widget en el escritorio para ver los errores del dia, ver el log compl
 * To customize the wp-config.php, go to the options page in the WPVL in WordPress admin panel.
 
 == Changelog ==
+= 2.0.1 =
+* Update Tested Version
+* Add Disabled plugin update on PHP 5.3, last updated Require 5.4 or later
 = 2.0 =
 * rewrite plugin and fix various issues
 * deleted older version
+
+== Upgrade Notice ==
+= 2.0.1 =
+Add Disabled plugin update on PHP 5.3, last updated Require 5.4 or later

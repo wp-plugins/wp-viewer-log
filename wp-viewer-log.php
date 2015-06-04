@@ -4,7 +4,7 @@ Plugin Name: WP Viewer Log
 Plugin URI: http://wordpress.org/extend/plugins/wp-viewer-log/
 Description: Lets see how many errors have had in the present day through a widget, configure your wp-config.php and see the file log.
 Author: Sergio P.A. ( 23r9i0 )
-Version: 2.0
+Version: 2.0.1
 Author URI: http://dsergio.com/
 */
 /*  Copyright 2013  Sergio Prieto Alvarez  ( email : info@dsergio.com )
@@ -32,7 +32,7 @@ register_deactivation_hook( __FILE__, array( 'WP_VIEWER_LOG', 'deactivation' ) )
 
 final class WP_VIEWER_LOG {
 
-	const WPVL_VERSION = '2.0';
+	const WPVL_VERSION = '2.0.1';
 
 	private static $instance = null;
 
@@ -112,6 +112,25 @@ final class WP_VIEWER_LOG {
 		}
 
 		add_action( 'init', array( $this, 'init' ) );
+
+		if ( version_compare( PHP_VERSION, '5.4.0', '<') ) {
+			add_filter( 'site_transient_update_plugins', array( $this, 'delete_plugin_update' ) );
+			add_filter( 'plugin_row_meta', array( $this, 'update_info_plugin' ), 10, 2 );
+		}
+	}
+
+	public function delete_plugin_update( $data ) {
+		unset( $data->response[ plugin_basename( __FILE__ ) ] );
+		return $data;
+	}
+
+	public function update_info_plugin( $plugin_meta, $plugin_file ) {
+		if ( plugin_basename( __FILE__ ) !== $plugin_file )
+			return $plugin_meta;
+
+			$plugin_meta[] = sprintf( '<strong>%s</strong>', __( 'Your PHP Version is not compatible with future updates, Upgrade to 5.4 or later', 'wabelang' ) );
+
+			return $plugin_meta;
 	}
 
 	public function init() {
